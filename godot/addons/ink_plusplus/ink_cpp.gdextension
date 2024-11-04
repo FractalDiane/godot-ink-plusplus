@@ -1,0 +1,8 @@
+[configuration]
+
+entry_symbol = "gdextension_lib_init"
+compatibility_minimum = "4.3"
+
+[libraries]
+
+windows.debug.x86_64 = "./libraries/ink_cpp.dll"

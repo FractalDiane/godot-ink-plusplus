@@ -1,0 +1,6 @@
+.vscode/
+build/
+godot/.godot/
+
+godot/addons/ink_plusplus/libraries/*.dll
+godot/addons/ink_plusplus/libraries/*.pdb
