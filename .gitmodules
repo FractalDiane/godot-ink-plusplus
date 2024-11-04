@@ -1,0 +1,3 @@
+[submodule "ink-cpp"]
+	path = ink-cpp
+	url = https://github.com/FractalDiane/ink-cpp.git
