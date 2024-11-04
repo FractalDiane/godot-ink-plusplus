@@ -8,6 +8,9 @@ string(TOLOWER ${CMAKE_BUILD_TYPE} build_type)
 
 set(SOURCES
 	src/ink_plugin.cpp
+	src/ink_player_editor.cpp
+	src/ink_player_entry.cpp
+	
 	src/ink_story.cpp
 	src/ink_compiler_gd.cpp
 	src/ink_story_compiled.cpp

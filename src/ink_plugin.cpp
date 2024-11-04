@@ -6,6 +6,7 @@
 #include <godot_cpp/classes/file_system_dock.hpp>
 #include <godot_cpp/classes/popup_menu.hpp>
 #include <godot_cpp/classes/resource_loader.hpp>
+#include <godot_cpp/classes/packed_scene.hpp>
 
 #include <godot_cpp/variant/utility_functions.hpp>
 
@@ -29,10 +30,15 @@ void godot::InkPlugin::_enter_tree() {
 		context_menu->connect("about_to_popup", Callable(this, "_on_context_menu_popup").bind(context_menu));
 		context_menu->connect("id_pressed", Callable(this, "_on_context_menu_id_pressed"));
 	}
+
+	Ref<PackedScene> ink_player_scene = ResourceLoader::get_singleton()->load("res://addons/ink_plusplus/ink_player_editor.tscn", "PackedScene");
+	ink_player = cast_to<Control>(ink_player_scene->instantiate());
+	add_control_to_bottom_panel(ink_player, "Ink Player");
 }
 
 void godot::InkPlugin::_exit_tree() {
-	
+	remove_control_from_bottom_panel(ink_player);
+	memfree(ink_player);
 }
 
 void godot::InkPlugin::_on_context_menu_popup(PopupMenu* context_menu) {

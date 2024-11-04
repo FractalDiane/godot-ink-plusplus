@@ -5,6 +5,9 @@
 #include <godot_cpp/godot.hpp>
 
 #include "ink_plugin.h"
+#include "ink_player_editor.h"
+#include "ink_player_entry.h"
+
 #include "ink_story.h"
 #include "ink_compiler_gd.h"
 #include "ink_story_compiled.h"
@@ -17,6 +20,9 @@ void initialize_gdextension_types(godot::ModuleInitializationLevel p_level) {
 	} else if (p_level == godot::MODULE_INITIALIZATION_LEVEL_EDITOR) {
 		godot::ClassDB::register_class<godot::InkPlugin>();
 		godot::EditorPlugins::add_by_type<godot::InkPlugin>();
+
+		godot::ClassDB::register_class<godot::InkPlayerEditor>();
+		godot::ClassDB::register_class<godot::InkPlayerEntry>();
 	}
 }
 

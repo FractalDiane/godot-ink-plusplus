@@ -11,6 +11,9 @@ void godot::InkStory::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("load_compiled_file", "file"), &godot::InkStory::load_compiled_file);
 
 	ClassDB::bind_method(D_METHOD("can_continue"), &godot::InkStory::can_continue);
+	ClassDB::bind_method(D_METHOD("is_story_finished"), &godot::InkStory::is_story_finished);
+
+
 	ClassDB::bind_method(D_METHOD("continue_story"), &godot::InkStory::continue_story);
 	ClassDB::bind_method(D_METHOD("continue_story_maximally"), &godot::InkStory::continue_story_maximally);
 
@@ -40,6 +43,10 @@ void godot::InkStory::load_compiled_file(Ref<InkStoryCompiled> file) {
 
 bool godot::InkStory::can_continue() const {
 	return story_internal.can_continue();
+}
+
+bool godot::InkStory::is_story_finished() const {
+	return !story_internal.can_continue() && story_internal.get_current_choices().empty();
 }
 
 godot::String godot::InkStory::continue_story() {

@@ -21,6 +21,8 @@ public:
 	void load_compiled_file(Ref<InkStoryCompiled> file);
 
 	bool can_continue() const;
+	bool is_story_finished() const;
+
 	String continue_story();
 	String continue_story_maximally();
 

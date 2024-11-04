@@ -10,6 +10,8 @@ class InkPlugin : public EditorPlugin {
 private:
 	std::int64_t compile_option_hash;
 
+	Control* ink_player;
+
 protected:
 	static void _bind_methods();
 
