@@ -37,6 +37,10 @@ public:
 	void observe_variable(const StringName& variable_name, Callable callback);
 
 	void bind_external_function(const StringName& function_name, Callable function, bool lookahead_safe = false);
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	const ExpressionParserV2::StoryVariableInfo& get_internal_variable_info() const { return story_internal.get_variable_info(); }
 };
 
 }

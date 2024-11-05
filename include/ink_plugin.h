@@ -1,6 +1,7 @@
 #pragma once
 
 #include <godot_cpp/classes/editor_plugin.hpp>
+#include <godot_cpp/classes/resource.hpp>
 
 namespace godot {
 
@@ -25,6 +26,8 @@ public:
 private:
 	void _on_context_menu_popup(PopupMenu* context_menu);
 	void _on_context_menu_id_pressed(std::int64_t id);
+
+	void _on_resource_saved(Ref<Resource> resource);
 };
 
 }

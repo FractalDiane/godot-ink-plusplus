@@ -48,6 +48,7 @@ private:
 	void add_continue();
 	void add_choices(const TypedArray<String>& choices);
 
+	void update_variables();
 	void update_button_visibility();
 	void clear_story_content();
 

@@ -13,6 +13,7 @@
 void godot::InkPlugin::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("_on_context_menu_popup"), &godot::InkPlugin::_on_context_menu_popup);
 	ClassDB::bind_method(D_METHOD("_on_context_menu_id_pressed"), &godot::InkPlugin::_on_context_menu_id_pressed);
+	ClassDB::bind_method(D_METHOD("_on_resource_saved"), &godot::InkPlugin::_on_resource_saved);
 }
 
 void godot::InkPlugin::_enter_tree() {
@@ -34,6 +35,8 @@ void godot::InkPlugin::_enter_tree() {
 	Ref<PackedScene> ink_player_scene = ResourceLoader::get_singleton()->load("res://addons/ink_plusplus/ink_player_editor.tscn", "PackedScene");
 	ink_player = cast_to<Control>(ink_player_scene->instantiate());
 	add_control_to_bottom_panel(ink_player, "Ink Player");
+
+	connect("resource_saved", Callable(this, "_on_resource_saved"));
 }
 
 void godot::InkPlugin::_exit_tree() {
@@ -54,5 +57,11 @@ void godot::InkPlugin::_on_context_menu_id_pressed(std::int64_t id) {
 		Ref<godot::InkCompiler> compiler = memnew(godot::InkCompiler);
 		String file_path = get_editor_interface()->get_current_path();
 		compiler->compile_file_to_file(file_path, file_path.get_basename() + ".res");
+	}
+}
+
+void godot::InkPlugin::_on_resource_saved(Ref<Resource> resource) {
+	if (resource.is_valid()) {
+		UtilityFunctions::print("Resource saved: ", resource->get_name());
 	}
 }

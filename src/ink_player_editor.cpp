@@ -88,6 +88,8 @@ void godot::InkPlayerEditor::continue_story(bool maximally) {
 }
 
 void godot::InkPlayerEditor::add_text(const String& text, const TypedArray<String>& tags) {
+	UtilityFunctions::print(text);
+	UtilityFunctions::print(tags);
 	if (!text.strip_edges().is_empty()) {
 		Ref<PackedScene> entry_scene = ResourceLoader::get_singleton()->load("res://addons/ink_plusplus/ink_player_entry.tscn", "PackedScene");
 		InkPlayerEntry* entry = cast_to<InkPlayerEntry>(entry_scene->instantiate());
@@ -121,6 +123,10 @@ void godot::InkPlayerEditor::add_choices(const TypedArray<String>& choices) {
 	choices_header_text->set_text("Choices");
 }
 
+void godot::InkPlayerEditor::update_variables() {
+
+}
+
 void godot::InkPlayerEditor::update_button_visibility() {
 	button_start->set_visible(!story_running);
 	button_restart->set_visible(story_running);
@@ -142,12 +148,11 @@ void godot::InkPlayerEditor::clear_story_content() {
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 void godot::InkPlayerEditor::_on_selected_story_changed(Ref<Resource> resource) {
-	UtilityFunctions::print("test");
 	clear_story_content();
 	story_running = false;
 	update_button_visibility();
 
-	button_start->set_disabled(resource->get_class() != "InkStoryCompiled");
+	button_start->set_disabled(resource.is_null() || resource->get_class() != "InkStoryCompiled");
 	story_file = resource;
 }
 

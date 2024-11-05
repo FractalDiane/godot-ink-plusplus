@@ -22,14 +22,21 @@ void godot::InkPlayerEntry::set_text(const String& text) {
 }
 
 void godot::InkPlayerEntry::set_tags(const TypedArray<String>& tags) {
-	for (int i = 0; i < tags.size(); ++i) {
-		RichTextLabel* text = memnew(RichTextLabel);
-		text->set_fit_content(true);
-		text->set_clip_contents(false);
-		text->set_v_size_flags(Control::SIZE_SHRINK_CENTER | Control::SIZE_EXPAND);
-		text->set_use_bbcode(true);
-		text->set_text(String("[color=#ffffff80]#[/color] {0}").format(Array::make(tags[i])));
+	RichTextLabel* text = memnew(RichTextLabel);
+	text->set_fit_content(true);
+	text->set_clip_contents(false);
+	text->set_v_size_flags(Control::SIZE_SHRINK_CENTER | Control::SIZE_EXPAND);
+	text->set_use_bbcode(true);
 
+	String text_contents;
+	for (int i = 0; i < tags.size(); ++i) {
+		text_contents += String("[color=#ffffff80]#[/color] {0}{1}").format(Array::make(tags[i], i < tags.size() - 1 ? "  " : ""));
+	}
+
+	if (!text_contents.is_empty()) {
+		text->set_text(text_contents);
 		tag_container->add_child(text);
+	} else {
+		tag_container->set_visible(false);
 	}
 }
