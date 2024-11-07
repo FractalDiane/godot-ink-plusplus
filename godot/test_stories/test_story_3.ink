@@ -11,6 +11,11 @@
 //  Some are general, some specific to particular items
 //
 
+/* test */
+
+/*
+test
+*/
 
 LIST OffOn = off, on
 LIST SeenUnseen = unseen, seen
