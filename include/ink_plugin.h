@@ -2,8 +2,7 @@
 
 #include <godot_cpp/classes/editor_plugin.hpp>
 #include <godot_cpp/classes/resource.hpp>
-
-#include "ink_syntax_highlighter.h"
+#include <godot_cpp/classes/editor_syntax_highlighter.hpp>
 
 namespace godot {
 
@@ -14,7 +13,6 @@ private:
 	std::int64_t compile_option_hash;
 
 	Control* ink_player;
-	//Ref<InkSyntaxHighlighter> syntax_highlighter;
 	Ref<EditorSyntaxHighlighter> syntax_highlighter;
 
 protected:

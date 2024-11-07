@@ -13,7 +13,6 @@ set(SOURCES
 	src/ink_plugin.cpp
 	src/ink_player_editor.cpp
 	src/ink_player_entry.cpp
-	src/ink_syntax_highlighter.cpp
 	
 	src/ink_story.cpp
 	src/ink_compiler_gd.cpp

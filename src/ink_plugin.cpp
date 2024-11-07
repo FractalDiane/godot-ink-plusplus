@@ -38,8 +38,6 @@ void godot::InkPlugin::_enter_tree() {
 	Ref<PackedScene> ink_player_scene = ResourceLoader::get_singleton()->load("res://addons/ink_plusplus/ink_player_editor.tscn", "PackedScene");
 	ink_player = cast_to<Control>(ink_player_scene->instantiate());
 	add_control_to_bottom_panel(ink_player, "Ink Player");
-
-	//Ref<InkSyntaxHighlighter> hl = memnew(InkSyntaxHighlighter);
 	
 	Ref<Script> gd_highlighter = ResourceLoader::get_singleton()->load("res://addons/ink_plusplus/ink_syntax_highlighter.gd");
 	Ref<EditorSyntaxHighlighter> hl = memnew(EditorSyntaxHighlighter);
@@ -76,7 +74,7 @@ void godot::InkPlugin::_on_context_menu_id_pressed(std::int64_t id) {
 			Ref<godot::InkCompiler> compiler = memnew(godot::InkCompiler);
 			compiler->compile_file_to_file(file_path, file_path.get_basename() + ".res");
 		} else {
-			//compile_all_files(file_path);
+			compile_all_files(file_path);
 		}
 	}
 }
@@ -97,7 +95,9 @@ void godot::InkPlugin::compile_all_files(const String& path) {
 					continue;
 				}
 
-				compiler->compile_file_to_file(filename, filename.get_basename() + ".res");
+				String in_path = dir->get_current_dir().path_join(filename);
+				String out_path = dir->get_current_dir().path_join(filename.get_basename() + ".res");
+				compiler->compile_file_to_file(in_path, out_path);
 			}
 
 			filename = dir->get_next();

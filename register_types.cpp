@@ -7,7 +7,6 @@
 #include "ink_plugin.h"
 #include "ink_player_editor.h"
 #include "ink_player_entry.h"
-#include "ink_syntax_highlighter.h"
 
 #include "ink_story.h"
 #include "ink_compiler_gd.h"
@@ -24,7 +23,6 @@ void initialize_gdextension_types(godot::ModuleInitializationLevel p_level) {
 
 		godot::ClassDB::register_class<godot::InkPlayerEditor>();
 		godot::ClassDB::register_class<godot::InkPlayerEntry>();
-		godot::ClassDB::register_class<godot::InkSyntaxHighlighter>();
 	}
 }
 
