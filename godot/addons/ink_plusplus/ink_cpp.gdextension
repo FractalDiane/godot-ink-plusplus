@@ -5,4 +5,5 @@ compatibility_minimum = "4.3"
 
 [libraries]
 
-windows.debug.x86_64 = "./libraries/ink_cpp.dll"
+windows.debug.x86_64 = "./libraries/ink_cpp_debug.dll"
+windows.release.x86_64 = "./libraries/ink_cpp_release.dll"

@@ -1,12 +1,11 @@
 #include "ink_player_editor.h"
 
 #include "ink_player_entry.h"
+#include "ink_gd_utils.h"
 
 #include <godot_cpp/classes/editor_resource_picker.hpp>
 #include <godot_cpp/classes/resource_loader.hpp>
 #include <godot_cpp/classes/packed_scene.hpp>
-
-#include <godot_cpp/variant/utility_functions.hpp>
 
 void godot::InkPlayerEditor::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("_on_selected_story_changed"), &godot::InkPlayerEditor::_on_selected_story_changed);
@@ -25,6 +24,8 @@ void godot::InkPlayerEditor::_bind_methods() {
 void godot::InkPlayerEditor::_ready() {
 	story_items = get_node<VBoxContainer>("VBoxContainer/HSplitContainer/MarginContainer/ScrollContainer/StoryItems");
 	story_choices = get_node<VBoxContainer>("VBoxContainer/HSplitContainer/HSplitContainer/MarginContainer2/ScrollContainer/MarginContainer/VBoxContainer/StoryChoices");
+	story_variables = get_node<VBoxContainer>("VBoxContainer/HSplitContainer/HSplitContainer/MarginContainer3/ScrollContainer/MarginContainer/VBoxContainer/StoryVariables");
+	story_scroll_container = get_node<ScrollContainer>("VBoxContainer/HSplitContainer/HSplitContainer/MarginContainer2/ScrollContainer");
 
 	choices_header = get_node<HBoxContainer>("VBoxContainer/HSplitContainer/HSplitContainer/MarginContainer2/ScrollContainer/MarginContainer/VBoxContainer/ChoicesHeader");
 	choices_header_text = get_node<Label>("VBoxContainer/HSplitContainer/HSplitContainer/MarginContainer2/ScrollContainer/MarginContainer/VBoxContainer/ChoicesHeader/ChoicesHeaderText");
@@ -85,11 +86,12 @@ void godot::InkPlayerEditor::continue_story(bool maximally) {
 			add_choices(story->get_current_choices());
 		}
 	}
+
+	story_scroll_container->set_v_scroll(INT32_MAX - 1);
+	update_variables();
 }
 
 void godot::InkPlayerEditor::add_text(const String& text, const TypedArray<String>& tags) {
-	UtilityFunctions::print(text);
-	UtilityFunctions::print(tags);
 	if (!text.strip_edges().is_empty()) {
 		Ref<PackedScene> entry_scene = ResourceLoader::get_singleton()->load("res://addons/ink_plusplus/ink_player_entry.tscn", "PackedScene");
 		InkPlayerEntry* entry = cast_to<InkPlayerEntry>(entry_scene->instantiate());
@@ -124,7 +126,28 @@ void godot::InkPlayerEditor::add_choices(const TypedArray<String>& choices) {
 }
 
 void godot::InkPlayerEditor::update_variables() {
+	Array children = story_variables->get_children();
+	for (int i = 0; i < children.size(); ++i) {
+		cast_to<Node>(children[i])->queue_free();
+	}
 
+	const ExpressionParserV2::StoryVariableInfo var_info = story->get_internal_variable_info();
+	for (const auto& constant : var_info.constants) {
+		Ref<PackedScene> entry_scene = ResourceLoader::get_singleton()->load("res://addons/ink_plusplus/ink_player_entry.tscn", "PackedScene");
+		InkPlayerEntry* entry = cast_to<InkPlayerEntry>(entry_scene->instantiate());
+		entry->set_variable_value(constant.second);
+		entry->call_deferred("set_variable", ink_string_to_godot(constant.first));
+		story_variables->add_child(entry);
+	}
+
+	// TODO: dry it
+	for (const auto& var : var_info.variables) {
+		Ref<PackedScene> entry_scene = ResourceLoader::get_singleton()->load("res://addons/ink_plusplus/ink_player_entry.tscn", "PackedScene");
+		InkPlayerEntry* entry = cast_to<InkPlayerEntry>(entry_scene->instantiate());
+		entry->set_variable_value(var.second);
+		entry->call_deferred("set_variable", ink_string_to_godot(var.first));
+		story_variables->add_child(entry);
+	}
 }
 
 void godot::InkPlayerEditor::update_button_visibility() {
@@ -142,6 +165,11 @@ void godot::InkPlayerEditor::clear_story_content() {
 	Array buttons = story_choices->get_children();
 	for (int i = 0; i < buttons.size(); ++i) {
 		cast_to<Node>(buttons[i])->queue_free();
+	}
+
+	Array vars = story_variables->get_children();
+	for (int i = 0; i < vars.size(); ++i) {
+		cast_to<Node>(vars[i])->queue_free();
 	}
 }
 

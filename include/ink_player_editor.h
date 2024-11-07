@@ -6,6 +6,7 @@
 #include <godot_cpp/classes/control.hpp>
 #include <godot_cpp/classes/v_box_container.hpp>
 #include <godot_cpp/classes/h_box_container.hpp>
+#include <godot_cpp/classes/scroll_container.hpp>
 #include <godot_cpp/classes/label.hpp>
 #include <godot_cpp/classes/button.hpp>
 
@@ -24,6 +25,9 @@ private:
 
 	VBoxContainer* story_items;
 	VBoxContainer* story_choices;
+	VBoxContainer* story_variables;
+
+	ScrollContainer* story_scroll_container;
 
 	HBoxContainer* choices_header;
 	Label* choices_header_text;
