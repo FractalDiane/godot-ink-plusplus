@@ -1,11 +1,17 @@
 #include "ink_story.h"
 
+#include "ink_compiler.h"
 #include "ink_story_compiled.h"
 #include "ink_gd_utils.h"
 
 #include <godot_cpp/variant/utility_functions.hpp>
 #include <godot_cpp/classes/resource_loader.hpp>
 #include <godot_cpp/classes/project_settings.hpp>
+
+#ifdef DEBUG_ENABLED
+#include <godot_cpp/classes/file_access.hpp>
+#include <godot_cpp/classes/time.hpp>
+#endif
 
 void godot::InkStory::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("load_compiled_file", "file"), &godot::InkStory::load_compiled_file);
@@ -31,11 +37,26 @@ void godot::InkStory::_bind_methods() {
 }
 
 void godot::InkStory::load_and_compile_file(const String& file) {
-	//std::string path = godot_string_to_ink(ProjectSettings::get_singleton()->globalize_path(file));
-	//story_internal = ::InkStory(path);
+	std::string path = godot_string_to_ink(ProjectSettings::get_singleton()->globalize_path(file));
+	::InkCompiler compiler;
+	story_internal = compiler.compile_file(path);
 }
 
 void godot::InkStory::load_compiled_file(Ref<InkStoryCompiled> file) {
+	#ifdef DEBUG_ENABLED
+	std::uint64_t compiled_time = FileAccess::get_modified_time(file->get_path());
+	std::uint64_t script_time = FileAccess::get_modified_time(file->get_path().get_basename() + ".ink");
+	
+	if (script_time > compiled_time) {
+		std::int64_t offset = static_cast<std::int64_t>(Time::get_singleton()->get_time_zone_from_system()["bias"]) * 60;
+		String compiled_time_str = Time::get_singleton()->get_datetime_string_from_unix_time(compiled_time + offset, true);
+		String script_time_str = Time::get_singleton()->get_datetime_string_from_unix_time(script_time + offset, true);
+		UtilityFunctions::push_warning(
+			"Compiled ink file ", file->get_path(), " may be outdated compared to its script;\nInk file modified at: ",
+			script_time_str, "\nCompiled file modified at: ", compiled_time_str);
+	}
+	#endif
+
 	story_internal = ::InkStory(godot_byte_array_to_ink(file->get_data()));
 }
 
@@ -75,7 +96,7 @@ godot::Variant godot::InkStory::get_variable(const StringName& variable_name) co
 	if (result.has_value()) {
 		return ink_variant_to_godot(std::move(*result));
 	} else {
-		godot::UtilityFunctions::push_error("Ink story variable \"", variable_name, "\" not found");
+		UtilityFunctions::push_error("Ink story variable \"", variable_name, "\" not found");
 		return godot::Variant();
 	}
 }

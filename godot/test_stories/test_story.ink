@@ -11,5 +11,4 @@ line 3
 line 4
 five is {get_five() + 3}
 line 5
-
-test
+line 6

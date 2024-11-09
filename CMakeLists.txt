@@ -24,7 +24,7 @@ if(WIN32)
 	add_compile_definitions(TYPED_METHOD_BIND NOMINMAX)
 endif()
 
-if(CMAKE_BUILD_TYPE EQUAL Debug)
+if(CMAKE_BUILD_TYPE STREQUAL Debug)
 	add_compile_definitions(DEBUG_ENABLED DEBUG_METHODS_ENABLED)
 endif()
 
