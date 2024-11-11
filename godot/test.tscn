@@ -5,7 +5,7 @@ script/source = "extends Node2D
 
 func _ready() -> void:
 	var story := InkStory.new()
-	story.load_compiled_file(preload(\"res://test_stories/functions_test.res\"))
+	story.load_compiled_file(preload(\"res://test_stories/functions_test_2.res\"))
 	story.bind_external_function(&\"get_five\", func(): return 5)
 	story.bind_external_function(&\"double\", func(what: int): return what * 2)
 	print(story.continue_story_maximally())
