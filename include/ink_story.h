@@ -17,7 +17,7 @@ protected:
 	static void _bind_methods();
 
 public:
-	void load_and_compile_file(const String& file);
+	void load_and_compile_file(const String& file, const String& root_include_path = String());
 	void load_compiled_file(Ref<InkStoryCompiled> file);
 
 	bool can_continue() const;

@@ -14,6 +14,7 @@
 #endif
 
 void godot::InkStory::_bind_methods() {
+	ClassDB::bind_method(D_METHOD("load_and_compile_file", "file", "root_include_path"), &godot::InkStory::load_and_compile_file, DEFVAL(String("res://")));
 	ClassDB::bind_method(D_METHOD("load_compiled_file", "file"), &godot::InkStory::load_compiled_file);
 
 	ClassDB::bind_method(D_METHOD("can_continue"), &godot::InkStory::can_continue);
@@ -36,9 +37,13 @@ void godot::InkStory::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("bind_external_function", "function_name", "function", "lookahead_safe"), &godot::InkStory::bind_external_function, DEFVAL(false));
 }
 
-void godot::InkStory::load_and_compile_file(const String& file) {
+void godot::InkStory::load_and_compile_file(const String& file, const String& root_include_path) {
 	std::string path = godot_string_to_ink(ProjectSettings::get_singleton()->globalize_path(file));
 	::InkCompiler compiler;
+	if (!root_include_path.is_empty()) {
+		compiler.set_root_include_path(godot_string_to_ink(ProjectSettings::get_singleton()->globalize_path(root_include_path)));
+	}
+
 	story_internal = compiler.compile_file(path);
 }
 
