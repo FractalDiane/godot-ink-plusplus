@@ -4,11 +4,23 @@
 #include <iterator>
 
 godot::String ink_string_to_godot(const std::string& ink_string) {
-	return godot::String(ink_string.c_str());
+	godot::PackedByteArray bytes;
+	bytes.resize(ink_string.size());
+	for (std::size_t i = 0; i < ink_string.size(); ++i) {
+		bytes[i] = ink_string[i];
+	}
+
+	return bytes.get_string_from_utf8();
 }
 
 godot::String ink_string_to_godot(std::string&& ink_string) {
-	return  godot::String(ink_string.c_str());
+	godot::PackedByteArray bytes;
+	bytes.resize(ink_string.size());
+	for (std::size_t i = 0; i < ink_string.size(); ++i) {
+		bytes[i] = ink_string[i];
+	}
+
+	return bytes.get_string_from_utf8();
 }
 
 std::string godot_string_to_ink(const godot::String& godot_string) {
