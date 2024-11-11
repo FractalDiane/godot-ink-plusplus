@@ -16,14 +16,11 @@ void godot::InkCompiler::_bind_methods() {
 
 godot::InkCompiler::InkCompiler() {
 	compiler_internal.set_root_include_path(godot_string_to_ink(ProjectSettings::get_singleton()->globalize_path("res://")));
-	UtilityFunctions::print(ProjectSettings::get_singleton()->globalize_path("res://"));
 }
 
 void godot::InkCompiler::compile_file_to_file(const String& in_ink_file, const String& out_res_file) {
 	std::string infile = godot_string_to_ink(ProjectSettings::get_singleton()->globalize_path(in_ink_file));
 	::InkStory result = compiler_internal.compile_file(infile);
-	UtilityFunctions::print(ProjectSettings::get_singleton()->globalize_path("res://"));
-	UtilityFunctions::print("hi");
 	
 	save_story_to_file(result, out_res_file);
 }
